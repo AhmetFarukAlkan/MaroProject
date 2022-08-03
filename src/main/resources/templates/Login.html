@@ -1,0 +1,100 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <title>Login</title>
+  <meta charset="UTF-8">
+  <link rel="stylesheet" href="/css/main.css"/>
+  <link rel="stylesheet" type="text/css" href="/webjars/bootstrap/4.3.1/css/bootstrap.min.css"/>
+
+
+  <meta name="google-signin-scope" content="profile email">
+  <meta name="google-signin-client_id" content="574033859076-1htgf8rnd862hdqc8j2a335ne18ganuv.apps.googleusercontent.com">
+
+</head>
+<body>
+<header class="bg-dark-blue">
+  <div class="container">
+    <nav id="navbar">
+      <h1 class="heading-small">Maroteknoloji Timesheet</h1>
+    </nav>
+  </div>
+</header>
+
+<section id="Main">
+  <div>
+    <h2 class="header">Login Page</h2>
+  </div>
+
+    <div id="LoginWithGoogle" class="m-2">
+      <a class="h3 btn btn-info btn-lg m-2" th:href="@{/home}">Login with Google</a>
+    </div>
+
+<!--  <div class="g-signin2" th:href="@{/home}" data-width="300" data-height="200" data-longtitle="true">-->
+
+
+  <!--  <meta name="google-signin-client_id" content="574033859076-1htgf8rnd862hdqc8j2a335ne18ganuv.apps.googleusercontent.com">-->
+<!--  <script src="https://apis.google.com/js/client:platform.js?onload=renderButton" async defer></script>-->
+
+<!--  <script>-->
+<!--    var idtoken;-->
+<!--    function handleCredentialResponse(response) {-->
+<!--      console.log("Encoded JWT ID token: " + response.credential);-->
+<!--      idtoken = response.credential;-->
+<!--      $.ajax({-->
+<!--        type: "POST",-->
+<!--        url: '/login',-->
+<!--        data: {"idtoken":idtoken},-->
+<!--        success: function (data) {-->
+<!--          location.replace("http://localhost:8080/home");-->
+<!--        }-->
+<!--      });-->
+<!--    }-->
+<!--    window.onload = function () {-->
+<!--      google.accounts.id.initialize({-->
+<!--        client_id: "574033859076-1htgf8rnd862hdqc8j2a335ne18ganuv.apps.googleusercontent.com",-->
+<!--        callback: handleCredentialResponse-->
+<!--      });-->
+<!--      google.accounts.id.renderButton(-->
+<!--              document.getElementById("buttonDiv"),-->
+<!--              { theme: "outline", size: "large",}  // customization attributes-->
+<!--      );-->
+<!--      google.accounts.id.prompt(); // also display the One Tap dialog-->
+<!--    }-->
+<!--  </script>-->
+<!--  <div id="buttonDiv"  style="position: absolute; top: 150px; left: 50%; transform: translate(-50%, 0%);"></div>-->
+
+
+<!--  <script src="https://accounts.google.com/gsi/client" async defer></script>-->
+<!--  <script src="http://ajax.googleapis.com/ajax/libs/jquery/1.9.1/jquery.min.js"></script>-->
+<!--  <script src="//ajax.googleapis.com/ajax/libs/jquery/1.9.1/jquery.min.js"></script>-->
+<!--  <script src="https://ajax.googleapis.com/ajax/libs/jquery/2.1.1/jquery.min.js"></script>-->
+<!--  <script src="https://apis.google.com/js/platform.js" async defer></script>-->
+</section>
+<!--<div id="g_id_onload"-->
+<!--     data-client_id="574033859076-1htgf8rnd862hdqc8j2a335ne18ganuv.apps.googleusercontent.com"-->
+<!--     data-login_uri="http://localhost:8080/home"-->
+<!--     data-callback="handleCredentialResponse"-->
+<!--     data-prompt_parent_id="g_id_onload"-->
+<!--&gt;-->
+<!--</div>-->
+<!--<script>-->
+<!--  function handleCredentialResponse(response) {-->
+<!--    // decodeJwtResponse() is a custom function defined by you-->
+<!--    // to decode the credential response.-->
+<!--    const responsePayload = decodeJwtResponse(response.credential);-->
+
+<!--    console.log("ID: " + responsePayload.sub);-->
+<!--    console.log('Full Name: ' + responsePayload.name);-->
+<!--    console.log('Given Name: ' + responsePayload.given_name);-->
+<!--    console.log('Family Name: ' + responsePayload.family_name);-->
+<!--    console.log("Image URL: " + responsePayload.picture);-->
+<!--    console.log("Email: " + responsePayload.email);-->
+<!--  }-->
+<!--</script>-->
+<script src="https://accounts.google.com/gsi/client" async defer></script>
+<script src="https://apis.google.com/js/client:platform.js?onload=renderButton" async defer></script>
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+<script src="https://apis.google.com/js/platform.js" async defer></script>
+</body>
+</html>

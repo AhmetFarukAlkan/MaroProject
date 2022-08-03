@@ -1,0 +1,112 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <title>User Form</title>
+    <meta charset="UTF-8">
+    <link rel="stylesheet" href="/css/main.css"/>
+    <link rel="stylesheet" type="text/css" th:href="@{/webjars/bootstrap/css/bootstrap.min.css}"/>
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@9"></script>
+
+</head>
+<body>
+<header class="bg-dark-blue">
+    <div class="container">
+        <nav id="navbar">
+            <a th:href = "@{/home}"><h1 class="heading-small">Maroteknoloji Timesheet</h1></a>
+            <ul th:object="${user}">
+
+                <li><a th:href = "@{/home}">[[${user.name}]]</a></li>
+                <li><img alt="" th:src="${picture}" style="width:42%;"><img/></li>
+            </ul>
+        </nav>
+    </div>
+</header>
+
+<div id="users" class="container-fluid text-center">
+    <div>
+        <h2 class="header">[[${pagetitle}]]</h2>
+    </div>
+
+    <form onsubmit="return ValueInput();" th:action="@{/home/users/save}" method="post" th:object="${user}" style="max-width: 500px; margin: 0 auto">
+        <input type="hidden" th:field="*{id}">
+        <input type="hidden" th:field="*{name}">
+        <input type="hidden" th:field="*{email}">
+        <div class="border border-secondary rounded p-3">
+            <div class="form-group row">
+                <label class="col-sm-4 col-form-label">Name</label>
+                <div class="col-sm-8">
+                    <label class="form-control" style="text-align: left">[[${user.name}]]</label>
+                </div>
+            </div>
+            <div class="form-group row">
+                <label class="col-sm-4 col-form-label">E-Mail</label>
+                <div class="col-sm-8">
+                    <label class="form-control" style="text-align: left">[[${user.email}]]</label>
+                </div>
+            </div>
+            <div class="form-group row">
+                <label class="col-sm-4 col-form-label">Role</label>
+                <div class="col-sm-8">
+                    <select id="user_role" class="form-control" th:field="*{user_role}">
+                        <option value="ADMIN">Admin</option>
+                        <option value="USER">User</option>
+                    </select>
+                </div>
+            </div>
+            <div class="form-group row">
+                <label class="col-sm-4 col-form-label">Status</label>
+                <div class="col-sm-4">
+                    <div class="form-group row">
+                        <input th:field="*{status}" type="radio" name="status" value="A"> Active
+                    </div>
+                    <div class="form-group row">
+                        <input th:field="*{status}" type="radio" name="status" value="P"> Pasive
+                    </div>
+                </div>
+            </div>
+
+            <div class="text-center">
+<!--                <button type="submit" class="btn btn-primary m-2">Save</button>-->
+                <button type="submit" class="btn btn-primary m-2">Save</button>
+                <button type="button" class="btn btn-primary m-2" onclick="cancelForm()">Cancel</button>
+            </div>
+
+        </div>
+    </form>
+
+</div>
+
+<script type="text/javascript">
+    function cancelForm(){
+        window.location = "[[@{/home/users}]]";
+    }
+</script>
+
+<script th:inline="javascript">
+    function ValueInput(){
+        try {
+            if (document.getElementById("user_role").value === "" ||document.querySelector('input[name="status"]:checked').value === ""){
+                fireSweetAlert("All fields are required");
+                return false;
+            }else {
+                return true;
+            }
+        }
+        catch(err) {
+            fireSweetAlert("All fields are required");
+            return false;
+        }
+
+    }
+
+    function fireSweetAlert(message) {
+        Swal.fire({
+            icon: 'error',
+            title: 'Oops...',
+            text: message
+        })
+    }
+
+</script>
+</body>
+</html>

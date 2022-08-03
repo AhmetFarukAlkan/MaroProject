@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+
+  <title>Home</title>
+  <meta charset="UTF-8">
+  <link rel="stylesheet" href="/css/main.css"/>
+  <link rel="stylesheet" type="text/css" th:href="@{/webjars/bootstrap/css/bootstrap.min.css}"/>
+  <meta name="google-signin-client_id" content="574033859076-1htgf8rnd862hdqc8j2a335ne18ganuv.apps.googleusercontent.com">
+  <script src="https://apis.google.com/js/client:platform.js?onload=renderButton" async defer></script>
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+
+</head>
+<body>
+<header class="bg-dark-blue">
+  <div class="container">
+    <nav id="navbar">
+      <a th:href = "@{/home}"><h1 class="heading-small">Maroteknoloji Timesheet</h1></a>
+      <ul th:object="${user}">
+
+        <li><a th:href = "@{/home}">[[${user.name}]]</a></li>
+        <li><img alt="" th:src="${picture}" style="width:42%;"><img/></li>
+      </ul>
+    </nav>
+  </div>
+</header>
+
+<section id="Main">
+  <div>
+    <table id="main_table_admin">
+      <tr>
+        <td><a th:href = "@{/home/timesheets}" title="Timesheet" ><figure><img alt="" src="/images/calendar.png" style="width:42%;"><img/><figcaption>Timesheet</figcaption></figure> </a></td>
+        <td><a th:href = "@{/home/customers}"  title="Customers"><figure><img alt="" src="/images/company.png" style="width:42%;"><img/><figcaption>Customers</figcaption></figure></a></td>
+      </tr>
+      <tr>
+        <td><a th:href = "@{/home/users}" title="Users"><figure><img alt="" src="/images/group.png" style="width:42%;"><img/><figcaption>Users</figcaption></figure></a></td>
+        <td><a th:href = "@{/home/logout}" title="Logout"><figure><img alt="" src="/images/exit.png" style="width:42%;"><img/><figcaption>Logout</figcaption></figure></a></td>
+      </tr>
+    </table>
+  </div>
+</section>
+
+<script src="https://accounts.google.com/gsi/client" async defer></script>
+<script src="http://ajax.googleapis.com/ajax/libs/jquery/1.9.1/jquery.min.js"></script>
+<script src="//ajax.googleapis.com/ajax/libs/jquery/1.9.1/jquery.min.js"></script>
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/2.1.1/jquery.min.js"></script>
+<script src="https://apis.google.com/js/platform.js" async defer></script>
+</body>
+</html>

@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <title>Home</title>
+    <meta charset="UTF-8">
+    <link rel="stylesheet" href="/css/main.css"/>
+    <link rel="stylesheet" type="text/css" th:href="@{/webjars/bootstrap/css/bootstrap.min.css}"/>
+
+</head>
+<body>
+<header class="bg-dark-blue">
+    <div class="container">
+        <nav id="navbar">
+            <a th:href = "@{/home}"><h1 class="heading-small">Maroteknoloji Timesheet</h1></a>
+            <ul th:object="${user}">
+                <li><a th:href = "@{/home}">[[${user.name}]]</a></li>
+                <li><img alt="" th:src="${picture}" style="width:42%;"><img/></li>
+            </ul>
+        </nav>
+    </div>
+</header>
+
+<section id="Main">
+    <div>
+        <table id="main_table_user">
+            <tr>
+<!--                isim sağa fotoğrafa bak homapage button maro logout button -->
+<!--                bilgi kutucuğu hoşgeldin .... girmediğin gün saysıs-->
+<!--                timesheet ve customer button aşağıya-->
+<!--                -->
+<!--                serach kutusu isim ve maile baksın users için-->
+                <td><a th:href = "@{/home/timesheets}" title="Timesheet" ><figure><img alt="" src="/images/calendar.png" style="width:35%;"><img/><figcaption>Timesheet</figcaption></figure> </a></td>
+                <td><a th:href = "@{/home/logout}" title="Logout"><figure><img alt="" src="/images/exit.png" style="width:35%;"><img/><figcaption>Logout</figcaption></figure></a></td>
+
+                <!--                <td><a th:href = "@{/home/logout}" title="Logout"><figure><img alt="" src="/images/exit.png" style="width:35%;"><img/><figcaption>Logout</figcaption></figure></figure></a></td>-->
+            </tr>
+        </table>
+    </div>
+</section>
+</body>
+</html>

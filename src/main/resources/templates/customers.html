@@ -1,0 +1,73 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Customers</title>
+  <link rel="stylesheet" href="/css/main.css"/>
+  <link rel="stylesheet" type="text/css" th:href="@{/webjars/bootstrap/css/bootstrap.min.css}"/>
+
+</head>
+<body>
+<header class="bg-dark-blue">
+  <div class="container">
+    <nav id="navbar">
+      <a th:href = "@{/home}"><h1 class="heading-small">Maroteknoloji Timesheet</h1></a>
+      <ul th:object="${user}">
+
+        <li><a th:href = "@{/home}">[[${user.name}]]</a></li>
+        <li><img alt="" th:src="${picture}" style="width:42%;"><img/></li>
+      </ul>
+    </nav>
+  </div>
+</header>
+
+<section id="customers">
+  <div>
+    <h2 class="header">Customers</h2>
+  </div>
+
+  <div id="createCustomer" class="m-2">
+    <a th:href="@{/home/customers/create}" class="btn btn-info m-2">Add New Customer</a>
+  </div>
+
+  <div>
+    <h2 th:if="${error}" class="alert alert-danger text-center"
+        style="font-size: large;">
+      [[${error}]]</h2>
+  </div>
+
+  <table id="table" class="table table-bordered">
+    <div>
+      <thead class="thead-light">
+        <tr>
+          <th>ID</th>
+          <th>Name</th>
+          <th>Location</th>
+          <th>Create Date</th>
+          <th>Create User</th>
+          <th>Status</th>
+          <th></th>
+        </tr>
+      </thead>
+      <tbody th:each = "customer : ${listCustomers}" }>
+        <tr>
+          <td>[[${customer.id}]]</td>
+          <td>[[${customer.name}]]</td>
+          <td>[[${customer.location}]]</td>
+          <td>[[${customer.createDate}]]</td>
+          <td>[[${customer.createUser}]]</td>
+          <td>[[${customer.status}]]</td>
+          <td>
+            <a th:href = "@{'/home/customers/edit/' + ${customer.id}}" class="btn btn-outline-primary btn-sm m-1">Edit</a>
+            <a th:href = "@{'/home/customers/delete/' + ${customer.id}}" class="btn btn btn-outline-danger btn-sm m-1">Delete</a>
+          </td>
+        </tr>
+      </tbody>
+    </div>
+
+  </table>
+
+
+</section>
+</body>
+</html>

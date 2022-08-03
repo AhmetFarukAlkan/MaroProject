@@ -1,0 +1,31 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <title>Passive User</title>
+    <meta charset="UTF-8">
+    <link rel="stylesheet" href="/css/main.css"/>
+    <link rel="stylesheet" type="text/css" href="/webjars/bootstrap/4.3.1/css/bootstrap.min.css"/>
+</head>
+<body>
+<header class="bg-dark-blue">
+    <div class="container">
+        <nav id="navbar">
+            <h1 class="heading-small">Maroteknoloji Timesheet</h1>
+        </nav>
+    </div>
+</header>
+
+<section id="Main">
+    <div>
+        <h2 class="text-center">Error</h2>
+    </div>
+
+    <div>
+        <p style="text-align: center">This user is inactive. <a th:href="@{/home/logout}">Click here </a> to go to the login page</p>
+    </div>
+
+</section>
+
+</body>
+</html>

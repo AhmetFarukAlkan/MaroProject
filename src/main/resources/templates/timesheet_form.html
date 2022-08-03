@@ -1,0 +1,150 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Activity Form</title>
+    <link rel="stylesheet" href="/css/main.css"/>
+    <link rel="stylesheet" type="text/css" th:href="@{/webjars/bootstrap/css/bootstrap.min.css}"/>
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@9"></script>
+    <script src="http://ajax.googleapis.com/ajax/libs/jquery/1.6/jquery.min.js" type="text/javascript"></script>
+    <script src="http://ajax.googleapis.com/ajax/libs/jqueryui/1.8/jquery-ui.min.js" type="text/javascript"></script>
+
+</head>
+<body>
+<header class="bg-dark-blue">
+    <div class="container">
+        <nav id="navbar">
+            <a th:href = "@{/home}"><h1 class="heading-small">Maroteknoloji Timesheet</h1></a>
+            <ul th:object="${user}">
+
+                <li><a th:href = "@{/home}">[[${user.name}]]</a></li>
+                <li><img alt="" th:src="${picture}" style="width:42%;"><img/></li>
+            </ul>
+        </nav>
+    </div>
+</header>
+
+<section id="timesheet">
+
+    <div id="addtimesheet" class="container-fluid text-center">
+        <div>
+            <h2 class="header">[[${pagetitle}]]</h2>
+        </div>
+
+        <div>
+            <h2 th:if="${error}" class="alert alert-danger text-center"
+                style="font-size: large;">
+                [[${error}]]</h2>
+        </div>
+<!--onsubmit="return ValueInput();"-->
+        <form onsubmit="return ValueInput();" th:action="@{/home/timesheets/create}" method="post" th:object="${timesheet}" style="max-width: 500px; margin: 0 auto">
+            <input type="hidden" th:field="*{id}">
+            <div class="border border-secondary rounded p-3">
+                <div class="form-group row">
+                    <label class="col-sm-4 col-form-label">Project Name</label>
+                    <div class="col-sm-8">
+                        <select id="Project Name" th:field="*{customer}" class="form-control" >
+                            <option th:each="customers : ${listCustomers}" th:value="${customers.name}" th:text="${customers.name}">
+                        </select>
+                    </div>
+                </div>
+                <div class="form-group row">
+                    <label class="col-sm-4 col-form-label">Task</label>
+                    <div class="col-sm-8">
+                        <select id="Task" th:field="*{task}" class="form-control">
+                            <option th:each="tasks : ${tasks}" th:value="${tasks.name}" th:text="${tasks.name}">
+                        </select>
+                    </div>
+                </div>
+                <div class="form-group row">
+                    <label class="col-sm-4 col-form-label">Activity Date</label>
+                    <div class="col-sm-8">
+                        <input id="Activity_Date" value="*{TimeSheetDate}" type="date" th:field="*{TimeSheetDate}" class="form-control"  name="activityDate">
+                    </div>
+                </div>
+                <div class="form-group row">
+                    <label class="col-sm-4 col-form-label">Effort (Hours)</label>
+                    <div class="col-sm-8">
+                        <input id="Effort (Hours)" type="number" th:field="*{duration}" class="form-control"/>
+                    </div>
+                </div>
+                <div class="form-group row">
+                    <label class="col-sm-4 col-form-label">Explanation</label>
+                    <div class="col-sm-8">
+                        <input id="Explanation" type="text" th:field="*{desc}" class="form-control"/>
+                    </div>
+                </div>
+                <div class="form-group row">
+                    <label class="col-sm-4 col-form-label">Location</label>
+                    <div class="col-sm-8">
+                        <input id="Location" type="text" th:field="*{location}" class="form-control"/>
+                    </div>
+                </div>
+                <div class="text-center">
+                    <button type="submit" class="btn btn-primary m-2">Save</button>
+                    <button type="button" class="btn btn-primary m-2" onclick="cancelForm()">Cancel</button>
+                </div>
+            </div>
+        </form>
+
+    </div>
+</section>
+
+<script type="text/javascript">
+    function cancelForm(){
+        window.location = "[[@{/home/timesheets}]]";
+    }
+</script>
+
+<script th:inline="javascript">
+    $(document).ready(function() {
+        let ActivityDate = [[${timesheet.timeSheetDate}]];
+        if (ActivityDate != null){
+            var date = new Date(ActivityDate);
+            month = '' + (date.getMonth() + 1);
+            day = '' + date.getDate(),
+                year = date.getFullYear();
+            if (month.length < 2)
+                month = '0' + month;
+            if (day.length < 2)
+                day = '0' + day;
+            var d = year + "-" + month + "-" + day;
+            document.getElementById("Activity_Date").value = d;
+        }
+    });
+</script>
+
+<script th:inline="javascript">
+    //grid component
+    function ValueInput(){
+        let ProjectName = document.getElementById("Project Name").value;
+        let Task = document.getElementById("Task").value;
+        let ActivityDate = document.getElementById("Activity_Date").value;
+        let Effort = document.getElementById("Effort (Hours)").value;
+        let Explanation = document.getElementById("Explanation").value;
+        let Location = document.getElementById("Location").value;
+        if (ProjectName === "" || Task === ""
+        || ActivityDate === "" || Effort === ""
+        || Explanation === "" || Location === "")
+        {
+            fireSweetAlert("All fields are required.");
+            return false;
+        }
+        else if (Effort < 1 || Effort > 24){
+            fireSweetAlert("Effort must be between 1 and 24.");
+            return false;
+        }
+        else {
+            return true;
+        }
+    }
+    function fireSweetAlert(message) {
+        Swal.fire({
+            icon: 'error',
+            title: 'Oops...',
+            text: message
+        })
+    }
+</script>
+</body>
+</html>

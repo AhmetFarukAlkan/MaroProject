@@ -1,0 +1,62 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <title>Users</title>
+    <meta charset="UTF-8">
+    <link rel="stylesheet" href="/css/main.css"/>
+    <link rel="stylesheet" type="text/css" th:href="@{/webjars/bootstrap/css/bootstrap.min.css}"/>
+
+</head>
+<body>
+<header class="bg-dark-blue">
+    <div class="container">
+        <nav id="navbar">
+            <a th:href = "@{/home}"><h1 class="heading-small">Maroteknoloji Timesheet</h1></a>
+            <ul th:object="${user}">
+
+                <li><a th:href = "@{/home}">[[${user.name}]]</a></li>
+                <li><img alt="" th:src="${picture}" style="width:42%;"><img/></li>
+            </ul>
+        </nav>
+    </div>
+</header>
+
+<section id="User">
+    <div>
+        <h2 class="header">Users</h2>
+    </div>
+    <table id="table" class="table table-bordered">
+
+        <div>
+            <thead class="thead-light">
+                <tr>
+                    <th>ID</th>
+                    <th>E-Mail</th>
+                    <th>Name</th>
+                    <th>Role</th>
+                    <th>Create Date</th>
+                    <th>Status</th>
+                    <th></th>
+                </tr>
+            </thead>
+            <tbody th:each = "user : ${listUsers}" }>
+                <tr>
+                    <td>[[${user.id}]]</td>
+                    <td>[[${user.email}]]</td>
+                    <td>[[${user.name}]]</td>
+                    <td>[[${user.user_role}]]</td>
+                    <td>[[${user.createDate}]]</td>
+                    <td>[[${user.status}]]</td>
+                    <td>
+                        <a th:href = "@{'/home/users/edit/' + ${user.id}}" class="btn btn-outline-primary btn-sm m-2">Edit</a>
+                    </td>
+                </tr>
+            </tbody>
+        </div>
+
+    </table>
+
+
+</section>
+</body>
+</html>

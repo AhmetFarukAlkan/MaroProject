@@ -1,0 +1,157 @@
+.text-center{
+    text-align:center;
+}
+
+.heading-small {
+    font-size : 1.25rem;
+}
+
+.heading-medium {
+    font-size : 1.25rem;
+}
+
+.heading-big{
+    font-size: 1.75rem;
+}
+
+.bg-dark-blue{
+    background:gray;
+}
+
+.bg-light-blue {
+    background:white;
+}
+
+.container{
+    max-width:1100px;
+    margin:0 auto;
+}
+
+#navbar a{
+    padding: 0.5rem;
+    font-weight:bold;
+    color:white;
+}
+
+#navbar a:hover{
+    color:gray;
+    background:white;
+    border-radius:6px;
+    text-decoration:none
+}
+
+#navbar ul li img{
+    border: 5px solid gray;
+    border-radius: 100px;
+}
+
+#navbar {
+    color: #fff;
+    display: flex;
+    justify-content:space-between;
+    align-items:center;
+    //padding : 0 0.75rem;
+    height: 70px;
+}
+#navbar ul {
+    list-style-type:none;
+    display:flex;
+    align-items:center;
+}
+
+
+.header{
+    /*font-family: "Copperplate Gothic Bold";*/
+    color: gray;
+    text-align: center;
+}
+#createCustomer {
+    text-align: center;
+    /*text-align: left;*/
+    /*padding-left: 4%;*/
+}
+
+#AddTimesheet {
+    text-align: center;
+    /*text-align: left;*/
+    /*padding-left: 4%;*/
+}
+
+#LoginWithGoogle {
+    text-align: center;
+}
+
+#table{
+    position: absolute;
+    left: 50%;
+    transform: translate(-50%, 0%);
+    width: 90%;
+}
+
+#edit {
+    color: #00dc00;
+}
+
+#delete {
+    color: red;
+}
+
+#filter {
+    padding-bottom: 8px;
+}
+
+td{
+    text-align: left;
+}
+
+#main_table_admin{
+    position: absolute;
+    left: 50%;
+    /*top: 50%;*/
+    transform: translate(-50%, 0%);
+    width: 70%;
+    top: 100px;
+
+}
+
+#main_table_admin td{
+    text-align: center;
+}
+
+#main_table_user{
+    position: absolute;
+    left: 50%;
+    /*top: 50%;*/
+    transform: translate(-50%, 0%);
+    width: 60%;
+    top: 150px;
+
+}
+
+#main_table_user td{
+    text-align: center;
+}
+
+figcaption{
+    text-align: center;
+}
+
+table tr td a:hover{
+    color: gray;
+}
+
+table tr td a{
+    color: gray;
+}
+
+figure{
+    border: 5px solid gray;
+    padding: 5px;
+    border-radius: 20px;
+}
+
+header{
+    position: relative;
+}
+
+
