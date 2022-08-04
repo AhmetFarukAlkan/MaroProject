@@ -55,7 +55,7 @@ public class UserController{
                 model.addAttribute("user", user);
                 model.addAttribute("pagetitle", "Edit User");
                 model.addAttribute("picture", user1.getAttributes().get("picture"));
-                model.addAttribute("user", userService.ControlUser(user1));
+                model.addAttribute("user1", userService.ControlUser(user1));
                 return "user_form";
             }
             else if (userService.ControlUser(user1).getUser_role().getName().equals("USER")){

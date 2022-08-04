@@ -13,9 +13,9 @@
     <div class="container">
         <nav id="navbar">
             <a th:href = "@{/home}"><h1 class="heading-small">Maroteknoloji Timesheet</h1></a>
-            <ul th:object="${user}">
+            <ul th:object="${user1}">
 
-                <li><a th:href = "@{/home}">[[${user.name}]]</a></li>
+                <li><a th:href = "@{/home}">[[${user1.name}]]</a></li>
                 <li><img alt="" th:src="${picture}" style="width:42%;"><img/></li>
             </ul>
         </nav>

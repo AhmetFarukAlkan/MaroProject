@@ -14,14 +14,14 @@ import javax.persistence.*;
 @Builder
 public class Role {
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    //@GeneratedValue(strategy = GenerationType.SEQUENCE)
     private String Name;
 
     @Column(length = 100, name = "description")
     private String description;
 
     @OneToOne
-    @JoinColumn(name = "user_role")
+//    @JoinColumn(name = "user_role")
 //    @OneToOne
 //    @MapsId
 //    @JoinColumn(name = "user_id")

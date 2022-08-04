@@ -1,31 +1,21 @@
 package com.MaroTekTimesheets.MaroProject.oauth2;
 
+import com.MaroTekTimesheets.MaroProject.Entity.Role;
+import com.MaroTekTimesheets.MaroProject.Entity.Task;
 import com.MaroTekTimesheets.MaroProject.Entity.User;
+import com.MaroTekTimesheets.MaroProject.Repo.RoleRepository;
+import com.MaroTekTimesheets.MaroProject.Repo.TaskRepository;
+import com.MaroTekTimesheets.MaroProject.Repo.UserRepository;
 import com.MaroTekTimesheets.MaroProject.Service.UserService;
-import com.google.api.client.auth.oauth2.*;
-import com.google.api.client.googleapis.auth.oauth2.GoogleCredential;
 import com.google.api.client.googleapis.auth.oauth2.GoogleIdToken;
 import com.google.api.client.googleapis.auth.oauth2.GoogleIdTokenVerifier;
-import com.google.api.client.googleapis.auth.oauth2.GoogleRefreshTokenRequest;
-import com.google.api.client.http.BasicAuthentication;
-import com.google.api.client.http.GenericUrl;
-import com.google.api.client.http.HttpTransport;
 import com.google.api.client.http.javanet.NetHttpTransport;
-import com.google.api.client.json.JsonFactory;
 import com.google.api.client.json.jackson2.JacksonFactory;
-import com.nimbusds.oauth2.sdk.http.HTTPResponse;
-import com.nimbusds.openid.connect.sdk.claims.UserInfo;
 import lombok.Getter;
 import lombok.Setter;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.security.config.annotation.web.builders.HttpSecurity;
-import org.springframework.security.core.Authentication;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
-import org.springframework.security.core.context.SecurityContextHolder;
-import org.springframework.security.oauth2.core.OAuth2AuthenticatedPrincipal;
-import org.springframework.security.oauth2.core.OAuth2RefreshToken;
-import org.springframework.security.oauth2.core.oidc.user.DefaultOidcUser;
 import org.springframework.security.oauth2.core.user.OAuth2User;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
@@ -33,45 +23,11 @@ import org.springframework.web.bind.annotation.*;
 import javax.annotation.security.PermitAll;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-import javax.swing.*;
 import java.io.IOException;
 import java.security.GeneralSecurityException;
-import java.security.Principal;
 import java.util.Collections;
-import java.util.LinkedHashMap;
-import com.google.api.client.googleapis.auth.oauth2.GoogleAuthorizationCodeTokenRequest;
-import com.google.api.client.googleapis.auth.oauth2.GoogleTokenResponse;
-import com.google.api.client.googleapis.auth.oauth2.GoogleCredential;
-import org.apache.oltu.oauth2.client.OAuthClient;
-import org.apache.oltu.oauth2.client.URLConnectionClient;
-import org.apache.oltu.oauth2.client.request.OAuthClientRequest;
-import org.apache.oltu.oauth2.client.response.OAuthJSONAccessTokenResponse;
-import org.apache.oltu.oauth2.common.OAuth;
-import org.apache.oltu.oauth2.common.message.types.GrantType;
+import java.util.Date;
 
-import java.io.BufferedReader;
-import java.io.InputStream;
-import java.io.InputStreamReader;
-import java.net.HttpURLConnection;
-import java.net.URL;
-import org.apache.commons.codec.binary.Base64;
-
-import java.io.IOException;
-import java.io.InputStream;
-import java.security.KeyManagementException;
-import java.security.KeyStoreException;
-import java.security.NoSuchAlgorithmException;
-import java.security.cert.CertificateException;
-import java.security.cert.X509Certificate;
-import org.apache.http.conn.ssl.SSLConnectionSocketFactory;
-import org.apache.http.conn.ssl.TrustStrategy;
-import org.apache.http.impl.client.CloseableHttpClient;
-import org.apache.http.impl.client.HttpClients;
-import org.apache.http.ssl.SSLContextBuilder;
-import com.google.gson.JsonElement;
-import com.google.gson.JsonParser;
-import com.mashape.unirest.http.HttpResponse;
-import com.mashape.unirest.http.Unirest;
 @Getter
 @Setter
 @org.springframework.stereotype.Controller
@@ -80,10 +36,20 @@ import com.mashape.unirest.http.Unirest;
 
 public final class Controller {
 
+    private  final RoleRepository roleRepository;
+
+    private final TaskRepository taskRepository;
+
+    private final UserRepository userRepository;
+
     private final UserService userService;
     static private User user;
 
-    public Controller(UserService userService) throws IOException {this.userService = userService;}
+    public Controller(RoleRepository roleRepository, TaskRepository taskRepository, UserRepository userRepository, UserService userService) throws IOException {
+        this.roleRepository = roleRepository;
+        this.taskRepository = taskRepository;
+        this.userRepository = userRepository;
+        this.userService = userService;}
 
     public User getUser() {
         return user;
@@ -93,6 +59,52 @@ public final class Controller {
 
     @GetMapping("")
     public String showLoginPage(){
+//        Role role = new Role();
+//        role.setName("USER");
+//        role.setDescription("User");
+//        roleRepository.save(role);
+//
+//        Role role1 = new Role();
+//        role1.setName("ADMIN");
+//        role1.setDescription("Admin");
+//        roleRepository.save(role1);
+//
+//        Task task = new Task();
+//        task.setId(4L);
+//        task.setName("Project Management");
+//        task.setDesc("project management");
+//        taskRepository.save(task);
+//        Task task1 = new Task();
+//        task1.setId(2L);
+//        task1.setName("Development");
+//        task1.setDesc("development");
+//        taskRepository.save(task1);
+//        Task task2 = new Task();
+//        task2.setId(3L);
+//        task2.setName("Presale");
+//        task2.setDesc("presale");
+//        taskRepository.save(task2);
+//        Task task3 = new Task();
+//        task3.setName("Management");
+//        task3.setDesc("management");
+//        taskRepository.save(task3);
+//        Task task4 = new Task();
+//        task4.setName("Business Analysis & Test");
+//        task4.setDesc("business analysis & test");
+//        taskRepository.save(task4);
+//        Task task5 = new Task();
+//        task5.setName("Eğitim");
+//        task5.setDesc("eğitim");
+//        taskRepository.save(task5);
+//        User user1 = new User();
+//        user1.setCreate_User("2");
+//        user1.setCreateDate(new Date());
+//        user1.setStatus("A");
+//        user1.setName("Ahmet Faruk Alkan");
+//        user1.setEmail("ahmetfarukalkan08@gmail.com");
+//        user1.setUser_role(roleRepository.getReferenceById("ADMIN"));
+//        userRepository.save(user1);
+
         return "Login";
     }
 
