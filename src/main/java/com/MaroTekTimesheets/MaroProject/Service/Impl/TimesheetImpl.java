@@ -39,6 +39,7 @@ public class TimesheetImpl implements TimesheetService {
     @Override
     public List<TimesheetDto> GetTimeSheets(){
         List<Timesheet> timesheets = timesheetRepository.findAll();
+        Collections.sort(timesheets);
         List<TimesheetDto> timesheetDtos =  new ArrayList<>();
         for (Timesheet timesheet:timesheets) {
             TimesheetDto timesheetDto = new TimesheetDto();
