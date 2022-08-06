@@ -13,7 +13,7 @@ import java.util.Date;
 @Setter
 @EqualsAndHashCode(of = {"id"})
 @ToString
-public class Customer {
+public class Customer implements Comparable<Customer>{
     @Id
     @SequenceGenerator(name = "seq_Costumer",allocationSize = 1)
     @GeneratedValue(generator = "seq_Costumer",strategy = GenerationType.SEQUENCE)
@@ -32,4 +32,8 @@ public class Customer {
     //@JoinColumn(name = "CustomerId")
     private Timesheet timesheet;
 
+    @Override
+    public int compareTo(Customer o) {
+        return getName().compareTo(o.getName());
+    }
 }
