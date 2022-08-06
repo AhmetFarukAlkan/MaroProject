@@ -45,6 +45,7 @@ public class UserImpl implements UserService {
     @Override
     public List<UserDto> GetUsers(){
         List<User> users = userRepository.findAll();
+        Collections.sort(users);
         List<UserDto> usersDtos = new ArrayList<>();
         users.forEach(user -> {
             UserDto userDto = new UserDto();
