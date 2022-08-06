@@ -49,6 +49,7 @@ public class CustomerImpl implements CustomerService {
     @Override
     public List<CustomerDto> GetCustomers() {
         List<Customer> customers = customerRepository.findAll();
+        Collections.sort(customers);
         List<CustomerDto> customerDtos = new ArrayList<>();
         customers.forEach(it ->{
             CustomerDto customerDto = new CustomerDto();
