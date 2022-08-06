@@ -15,6 +15,7 @@ import com.MaroTekTimesheets.MaroProject.Service.TimesheetService;
 import com.MaroTekTimesheets.MaroProject.Service.UserService;
 import lombok.RequiredArgsConstructor;
 import lombok.Value;
+import org.hibernate.cfg.Environment;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
@@ -27,10 +28,7 @@ import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 import java.text.DateFormat;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
-import java.util.ArrayList;
-import java.util.Date;
-import java.util.List;
-import java.util.Locale;
+import java.util.*;
 
 @Controller
 @RequestMapping("/home/timesheets")
@@ -60,6 +58,7 @@ public class TimesheetController {
             }
             else if (userService.ControlUser(user).getUser_role().getName().equals("USER")){
                 List<Timesheet> timesheets = timesheetRepository.findAll();
+                Collections.sort(timesheets);
                 List<TimesheetDto> Dtotimesheets = new ArrayList<>();
                 for (Timesheet timesheet:timesheets) {
                     if (timesheet.getUser().getEmail().equals(userService.ControlUser(user).getEmail())){
@@ -85,10 +84,11 @@ public class TimesheetController {
         return "redirect:/";
     }
 
-    @GetMapping("/get")
-    public ResponseEntity<List<Timesheet>> GetTimeSheets(){
-        return ResponseEntity.ok(timesheetRepository.findAll());
-    }
+
+//    @GetMapping("/get")
+//    public ResponseEntity<List<Timesheet>> GetTimeSheets(){
+//        return ResponseEntity.ok(timesheetRepository.findAll());
+//    }
 
     @GetMapping("/create")
     public String addNewTimesheet(Model model, @AuthenticationPrincipal OAuth2User user){
@@ -154,6 +154,7 @@ public class TimesheetController {
     @PostMapping("")
     public String Filter(FilterDto filterDto, Model model, @AuthenticationPrincipal OAuth2User user){
         List<Timesheet> timesheets = timesheetRepository.findAll();
+        Collections.sort(timesheets);
         List<TimesheetDto> Dtotimesheets = new ArrayList<>();
         if (userService.ControlUser(user).getUser_role().getName().equals("ADMIN")){
             for (Timesheet timesheet:timesheets) {
@@ -208,3 +209,4 @@ public class TimesheetController {
                 .findFirst().orElse(null);
     }
 }
+
