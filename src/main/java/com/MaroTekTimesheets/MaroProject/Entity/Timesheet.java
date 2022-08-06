@@ -16,7 +16,7 @@ import java.util.Date;
 @Setter
 @EqualsAndHashCode(of = {"id"})
 @Builder
-public class Timesheet {
+public class Timesheet implements Comparable<Timesheet>{
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
@@ -49,4 +49,8 @@ public class Timesheet {
     @Column(name = "CreateDate")
     private Date CreateDate;
 
+    @Override
+    public int compareTo(Timesheet o) {
+        return getTimeSheetDate().compareTo(o.getTimeSheetDate());
+    }
 }
