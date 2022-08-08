@@ -50,7 +50,7 @@
     display: flex;
     justify-content:space-between;
     align-items:center;
-    //padding : 0 0.75rem;
+    padding : 0 0.75rem;
     height: 70px;
 }
 #navbar ul {
@@ -104,29 +104,58 @@ td{
     text-align: left;
 }
 
+#space{
+    position: relative;
+
+}
+
 #main_table_admin{
     position: absolute;
     left: 50%;
-    /*top: 50%;*/
-    transform: translate(-50%, 0%);
+    top: 50%;
+    transform: translate(-50%, -50%);
     width: 70%;
-    top: 100px;
+    margin-top: 35px;
+    overflow: auto;
 
+}
+
+#main_table_user{
+    position: absolute;
+    left: 50%;
+    top: 50%;
+    transform: translate(-50%, -50%);
+    width: 60%;
+    overflow: auto;
+}
+
+@media screen and (max-width: 375px), screen and (max-height: 600px) {
+    #main_table_admin{
+        position: absolute;
+        left: 50%;
+        top: 100px;
+        transform: translate(-50%, 0%);
+        width: 70%;
+        margin-top: 35px;
+        overflow: auto;
+    }
+
+    #main_table_user{
+        position: absolute;
+        left: 50%;
+        /*top: 50%;*/
+        transform: translate(-50%, 0%);
+        width: 60%;
+        top: 150px;
+
+    }
 }
 
 #main_table_admin td{
     text-align: center;
 }
 
-#main_table_user{
-    position: absolute;
-    left: 50%;
-    /*top: 50%;*/
-    transform: translate(-50%, 0%);
-    width: 60%;
-    top: 150px;
 
-}
 
 #main_table_user td{
     text-align: center;
@@ -153,5 +182,4 @@ figure{
 header{
     position: relative;
 }
-
 
