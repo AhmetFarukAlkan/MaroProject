@@ -135,19 +135,43 @@ public class TimesheetController {
 
 
     @PostMapping({"/create","/edit"})
-    public String createActivity(TimesheetDto timesheetDto,@AuthenticationPrincipal OAuth2User user) throws ParseException {
-        Timesheet timesheet = new Timesheet();
-        timesheet.setId(timesheetDto.getId());
-        timesheet.setUser(userService.ControlUser(user));
-        timesheet.setCustomer(customerService.getCustomerByName(timesheetDto.getCustomer()));
-        timesheet.setTask(getTaskByName(timesheetDto.getTask()));
-        timesheet.setTimeSheetDate(new SimpleDateFormat("yyyy-MM-dd").parse(timesheetDto.getTimeSheetDate()));
-        timesheet.setLocation(timesheetDto.getLocation());
-        timesheet.setDesc(timesheetDto.getDesc());
-        timesheet.setDuration(timesheetDto.getDuration());
-        timesheet.setCreateDate(new Date());
-        timesheetService.CreateTimesheet(timesheet);
-        return "redirect:/home/timesheets";
+    public String createActivity(TimesheetDto timesheetDto,RedirectAttributes ra,@AuthenticationPrincipal OAuth2User user) throws ParseException {
+        if (timesheetDto.getTimeSheetDate().equals("") || timesheetDto.getDuration() == null
+                || timesheetDto.getDesc().equals("") || timesheetDto.getLocation().equals("")){
+            if (timesheetDto.getId() == null){
+                ra.addFlashAttribute("error","All fields are required.");
+                return "redirect:/home/timesheets/create";
+            }
+            else {
+                ra.addFlashAttribute("error","All fields are required.");
+                return "redirect:/home/timesheets/edit/" + timesheetDto.getId();
+            }
+        }
+        else if (timesheetDto.getDuration() < 1 || timesheetDto.getDuration() > 24){
+            if (timesheetDto.getId() == null){
+                ra.addFlashAttribute("error","Effort must be between 1 and 24.");
+                return "redirect:/home/timesheets/create";
+            }
+            else {
+                ra.addFlashAttribute("error","Effort must be between 1 and 24.");
+                return "redirect:/home/timesheets/edit/" + timesheetDto.getId();
+            }
+        }
+        else {
+            Timesheet timesheet = new Timesheet();
+            timesheet.setId(timesheetDto.getId());
+            timesheet.setUser(userService.ControlUser(user));
+            timesheet.setCustomer(customerService.getCustomerByName(timesheetDto.getCustomer()));
+            timesheet.setTask(getTaskByName(timesheetDto.getTask()));
+            timesheet.setTimeSheetDate(new SimpleDateFormat("yyyy-MM-dd").parse(timesheetDto.getTimeSheetDate()));
+            timesheet.setLocation(timesheetDto.getLocation());
+            timesheet.setDesc(timesheetDto.getDesc());
+            timesheet.setDuration(timesheetDto.getDuration());
+            timesheet.setCreateDate(new Date());
+            timesheetService.CreateTimesheet(timesheet);
+            return "redirect:/home/timesheets";
+        }
+
     }
 
 
