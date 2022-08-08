@@ -131,14 +131,26 @@ public class CustomerController {
         return ResponseEntity.ok(customerService.CreateCustomer(customerDto));
     }
 
-    @PostMapping({"/save"})
-    public String saveCustomer(Customer customer, @AuthenticationPrincipal OAuth2User user){
-        customer.setStatus("A");
-        customer.setCreateDate(new Date());
-        customer.setCreateUser(String.valueOf(userService.ControlUser(user).getId()));
-        //customer.setCreateUser(String.valueOf(customer.getId()));
-        customerService.saveCustomer(customer);
-        return "redirect:/home/customers";
+@PostMapping({"/save"})
+    public String saveCustomer(Customer customer, RedirectAttributes ra, @AuthenticationPrincipal OAuth2User user){
+        if(customer.getName().equals("") || customer.getLocation().equals("")){
+            if (customer.getId() == null){
+                ra.addFlashAttribute("error","All fields are required.");
+                return "redirect:/home/customers/create";
+            }else {
+                ra.addFlashAttribute("error","All fields are required.");
+                return "redirect:/home/customers/edit/"+customer.getId();
+            }
+        }
+        else{
+            customer.setStatus("A");
+            customer.setCreateDate(new Date());
+            customer.setCreateUser(String.valueOf(userService.ControlUser(user).getId()));
+            //customer.setCreateUser(String.valueOf(customer.getId()));
+            customerService.saveCustomer(customer);
+            return "redirect:/home/customers";
+        }
+
     }
 
     @PutMapping("/{id}")
