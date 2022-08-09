@@ -93,7 +93,7 @@ public class TimesheetController {
     @GetMapping("/create")
     public String addNewTimesheet(Model model, @AuthenticationPrincipal OAuth2User user){
         if (userService.isActive(user)){
-            model.addAttribute("listCustomers", customerService.GetCustomers());
+            model.addAttribute("listCustomers", customerService.GetActiveCustomers());
             model.addAttribute("tasks",timesheetService.GetTasks());
             model.addAttribute("timesheet", new TimesheetDto());
             model.addAttribute("pagetitle", "Create New Activity");
@@ -233,4 +233,3 @@ public class TimesheetController {
                 .findFirst().orElse(null);
     }
 }
-
