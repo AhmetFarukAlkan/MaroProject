@@ -34,25 +34,29 @@ public class TimesheetImpl implements TimesheetService {
         return timesheet;
     }
 
-    @Override
+@Override
     public List<TimesheetDto> GetTimeSheets(){
         List<Timesheet> timesheets = timesheetRepository.findAll();
         Collections.sort(timesheets);
         List<TimesheetDto> timesheetDtos =  new ArrayList<>();
         for (Timesheet timesheet:timesheets) {
-            TimesheetDto timesheetDto = new TimesheetDto();
-            timesheetDto.setId(timesheet.getId());
-            String pattern = "dd MMMM yyyy EEEEE";
-            SimpleDateFormat simpleDateFormat =new SimpleDateFormat(pattern, new Locale("tr", "TR"));
-            timesheetDto.setTimeSheetDate(simpleDateFormat.format(timesheet.getTimeSheetDate()));
-            timesheetDto.setLocation(timesheet.getLocation());
-            timesheetDto.setDesc(timesheet.getDesc());
-            timesheetDto.setDuration(timesheet.getDuration());
-            timesheetDto.setCustomer(timesheet.getCustomer().getName());
-            timesheetDto.setTask(timesheet.getTask().getName());
-            timesheetDto.setUser(timesheet.getUser());
-            timesheetDto.setCreateDate(timesheet.getCreateDate());
-            timesheetDtos.add(timesheetDto);
+            Date date = new Date();
+            if(date.getMonth() == timesheet.getTimeSheetDate().getMonth()
+                    && date.getYear() == timesheet.getTimeSheetDate().getYear()){
+                TimesheetDto timesheetDto = new TimesheetDto();
+                timesheetDto.setId(timesheet.getId());
+                String pattern = "dd MMMM yyyy EEEEE";
+                SimpleDateFormat simpleDateFormat =new SimpleDateFormat(pattern, new Locale("tr", "TR"));
+                timesheetDto.setTimeSheetDate(simpleDateFormat.format(timesheet.getTimeSheetDate()));
+                timesheetDto.setLocation(timesheet.getLocation());
+                timesheetDto.setDesc(timesheet.getDesc());
+                timesheetDto.setDuration(timesheet.getDuration());
+                timesheetDto.setCustomer(timesheet.getCustomer().getName());
+                timesheetDto.setTask(timesheet.getTask().getName());
+                timesheetDto.setUser(timesheet.getUser());
+                timesheetDto.setCreateDate(timesheet.getCreateDate());
+                timesheetDtos.add(timesheetDto);
+            }
 
         }
         return timesheetDtos;
