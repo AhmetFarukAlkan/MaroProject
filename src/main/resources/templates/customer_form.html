@@ -6,7 +6,9 @@
     <link rel="stylesheet" href="/css/main.css"/>
     <link rel="stylesheet" type="text/css" th:href="@{/webjars/bootstrap/css/bootstrap.min.css}"/>
     <script src="https://cdn.jsdelivr.net/npm/sweetalert2@9"></script>
-
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.6/jquery.min.js" type="text/javascript"></script>
+    <script src="https://ajax.googleapis.com/ajax/libs/jqueryui/1.8/jquery-ui.min.js" type="text/javascript"></script>
+    
 </head>
 <body>
 <header class="bg-dark-blue">
@@ -48,6 +50,23 @@
                     <input id="Location" type="text" th:field="*{location}" class="form-control"/>
                 </div>
             </div>
+            <div class="form-group row" style="display: none;" id="status">
+                <label class="col-sm-4 col-form-label">Status</label>
+                <div class="col-sm-1 form-group">
+                    <div class="form-check">
+                        <input th:field="*{status}" type="radio" class="form-check-input" name="status" value="A">
+                        <label class="form-check-label" for="status">
+                            Active
+                        </label>
+                    </div>
+                    <div class="form-check">
+                        <input th:field="*{status}" type="radio" class="form-check-input" name="status" value="P">
+                        <label class="form-check-label" for="status">
+                            Pasive
+                        </label>
+                    </div>
+                </div>
+            </div>
             <div class="text-center">
 <!--                <button type="submit" class="btn btn-primary m-2">Save</button>-->
                 <button type="submit" class="btn btn-primary m-2">Save</button>
@@ -86,5 +105,13 @@
         })
     }
 </script>
+    
+<script th:inline="javascript">
+    $(document).ready(function() {
+        if ([[${customer.id}]] !== null){
+            document.getElementById("status").style.display = "";
+        }
+    });
+</script>    
 </body>
 </html>
