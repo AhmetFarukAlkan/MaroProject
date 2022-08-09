@@ -37,6 +37,8 @@
 
     <form onsubmit="return ValueInput();" th:action="@{/home/customers/save}" method="post" th:object="${customer}" style="max-width: 500px; margin: 0 auto">
         <input type="hidden" th:field="*{id}">
+<!--        <input type="hidden" th:field="*{createDate}">-->
+        <input type="hidden" th:field="*{createUser}">
         <div class="border border-secondary rounded p-3">
             <div class="form-group row">
                 <label class="col-sm-4 col-form-label">Name</label>
