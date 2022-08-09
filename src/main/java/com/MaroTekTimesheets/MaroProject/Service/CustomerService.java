@@ -22,4 +22,7 @@ public interface CustomerService {
      void Delete(Customer customer);
 
      Timesheet CustomerControl(Long id);
+     
+     List<CustomerDto> GetActiveCustomers();
+
 }
