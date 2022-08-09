@@ -27,6 +27,7 @@
     margin:0 auto;
 }
 
+
 #navbar a{
     padding: 0.5rem;
     font-weight:bold;
@@ -72,7 +73,7 @@
 }
 
 #AddTimesheet {
-/*     text-align: center; */
+    /*text-align: center;*/
     /*text-align: left;*/
     padding-left: 4%;
 }
@@ -85,7 +86,9 @@
     position: absolute;
     left: 50%;
     transform: translate(-50%, 0%);
-    width: 90%;
+    max-width: 90%;
+    /*width: 90%;*/
+    overflow: auto;
 }
 
 #edit {
@@ -108,7 +111,6 @@ td{
     position: relative;
 
 }
-
 
 #main_table_admin{
     position: absolute;
@@ -133,27 +135,7 @@ td{
     overflow: auto;
 }
 
-@media screen and (max-width: 375px), screen and (max-height: 600px) {
-    #main_table_admin{
-        position: absolute;
-        left: 50%;
-        top: 100px;
-        transform: translate(-50%, 0%);
-        width: 70%;
-        margin-top: 35px;
-        overflow: auto;
-    }
 
-    #main_table_user{
-        position: absolute;
-        left: 50%;
-        /*top: 50%;*/
-        transform: translate(-50%, 0%);
-        width: 60%;
-        top: 150px;
-
-    }
-}
 
 #main_table_admin td{
     text-align: center;
@@ -187,3 +169,58 @@ header{
     position: relative;
 }
 
+@media screen and (max-width: 375px), screen and (max-height: 600px) {
+    #main_table_admin{
+        position: absolute;
+        left: 50%;
+        top: 100px;
+        transform: translate(-50%, 0%);
+        width: 70%;
+        margin-top: 35px;
+        overflow: auto;
+    }
+
+    #main_table_user{
+        position: absolute;
+        left: 50%;
+        /*top: 50%;*/
+        transform: translate(-50%, 0%);
+        width: 60%;
+        top: 150px;
+
+    }
+
+}
+@media screen and (max-width: 960px){
+    table{
+        font-size: 70% !important;
+        padding: 2px !important;
+    }
+    tr td{
+        padding: 4px !important;
+        margin: 4px !important;
+    }
+    tr th {
+        padding: 4px !important;
+        margin: 4px !important;
+    }
+}
+@media screen and (max-width: 540px){
+    table{
+        font-size: 60% !important;
+    }
+    tr td{
+        padding: 2px !important;
+        margin: 2px !important;
+    }
+    tr th {
+        padding: 2px !important;
+        margin: 2px !important;
+    }
+}
+
+@media screen and (max-width: 600px){
+    #filterTable div{
+        padding-bottom: 3px;
+    }
+}
