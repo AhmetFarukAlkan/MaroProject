@@ -72,9 +72,9 @@
 }
 
 #AddTimesheet {
-    text-align: center;
+/*     text-align: center; */
     /*text-align: left;*/
-    /*padding-left: 4%;*/
+    padding-left: 4%;
 }
 
 #LoginWithGoogle {
