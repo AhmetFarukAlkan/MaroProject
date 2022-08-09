@@ -63,6 +63,29 @@ public class CustomerImpl implements CustomerService {
         });
         return customerDtos;
     }
+    
+    @Override
+    public List<CustomerDto> GetActiveCustomers() {
+        List<Customer> customers = customerRepository.findAll();
+        Collections.sort(customers);
+        List<CustomerDto> customerDtos = new ArrayList<>();
+        customers.forEach(it ->{
+            if (it.getStatus().equals("A")){
+                CustomerDto customerDto = new CustomerDto();
+                customerDto.setId(it.getId());
+                customerDto.setLocation(it.getLocation());
+                String pattern = "dd-MM-yyyy";
+                SimpleDateFormat simpleDateFormat =new SimpleDateFormat(pattern, new Locale("tr", "TR"));
+                customerDto.setCreateDate(simpleDateFormat.format(it.getCreateDate()));
+                customerDto.setName(it.getName());
+                customerDto.setStatus(it.getStatus());
+                customerDto.setCreateUser(it.getCreateUser());
+                customerDtos.add(customerDto);
+            }
+        });
+        return customerDtos;
+    }
+    
     @Override
     public void UpdateCustomer(long id, Customer customer1){
         Customer customer = getCustomerById(id);
