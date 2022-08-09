@@ -151,6 +151,7 @@ public class CustomerController {
             else {
                 //for error
                 customer.setCreateDate(customerService.getCustomerById(customer.getId()).getCreateDate());
+                customer.setCreateUser(String.valueOf(userService.ControlUser(user).getId()));
 
             }
 
