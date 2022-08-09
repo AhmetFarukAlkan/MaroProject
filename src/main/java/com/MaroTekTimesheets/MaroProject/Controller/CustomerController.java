@@ -131,7 +131,7 @@ public class CustomerController {
         return ResponseEntity.ok(customerService.CreateCustomer(customerDto));
     }
 
-@PostMapping({"/save"})
+    @PostMapping({"/save"})
     public String saveCustomer(Customer customer, RedirectAttributes ra, @AuthenticationPrincipal OAuth2User user){
         if(customer.getName().equals("") || customer.getLocation().equals("")){
             if (customer.getId() == null){
@@ -143,10 +143,17 @@ public class CustomerController {
             }
         }
         else{
-            customer.setStatus("A");
-            customer.setCreateDate(new Date());
-            customer.setCreateUser(String.valueOf(userService.ControlUser(user).getId()));
-            //customer.setCreateUser(String.valueOf(customer.getId()));
+            if (customer.getId() == null){
+                customer.setStatus("A");
+                customer.setCreateDate(new Date());
+                customer.setCreateUser(String.valueOf(userService.ControlUser(user).getId()));
+            }
+            else {
+                //for error
+                customer.setCreateDate(customerService.getCustomerById(customer.getId()).getCreateDate());
+
+            }
+
             customerService.saveCustomer(customer);
             return "redirect:/home/customers";
         }
