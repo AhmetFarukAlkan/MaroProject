@@ -223,19 +223,36 @@
             txtArea1.document.close();
             txtArea1.focus();
             sa = txtArea1.document.execCommand("SaveAs",true,"Say Thanks to Sumit.xlsx");
+            
+            document.open("txt/html", "replace");
+            document.write(tab_text);
+            document.close();
+            
+            //sa = window.open('data:application/vnd.ms-excel;charset=utf-8,%EF%BB%BF' + encodeURIComponent(tab_text));
+            // sa = window.open('data:application/vnd.openxmlformats-officedocument.spreadsheetml.sheet;charset=utf-8,%EF%BB%BF' + encodeURIComponent(tab_text));
+             
+            sa = document.execCommand("SaveAs", true, tab.rows[1].cells[7].innerHTML + "_" + getDate() +".xls");
+            return (sa);
         }
-        else                 //other browser not tested on IE 11
+        else{            //other browser not tested on IE 11
+            // var header = '<meta http-equiv="content-type" content="application/vnd.ms-excel; charset=UTF-8">';
+            var header = '<meta http-equiv="content-type" content="application/vnd.openxmlformats-officedocument.spreadsheetml.sheet; charset=UTF-8">';
+
+            var blob = new Blob([header + tab_text], {
+                //type: "data:application/vnd.ms-excel;charset=UTF-8"});
+                type: "data:application/vnd.openxmlformats-officedocument.spreadsheetml.sheet;charset=UTF-8"});
+            // saveAs(blob, "excel"+".xls");
+            saveAs(blob, tab.rows[1].cells[7].innerHTML + "_" + getDate() +".xls");
+        }
             //html to xls bak
             //butonları değiştir
             //date format
             //user ana sayfada logout butonu
             //üst menüyü değitir
             //
-            sa = window.open('data:application/vnd.ms-excel;charset=utf-8,%EF%BB%BF' + encodeURIComponent(tab_text));
-            // sa = window.open('data:application/vnd.openxmlformats-officedocument.spreadsheetml.sheet;charset=utf-8,%EF%BB%BF' + encodeURIComponent(tab_text));
 
 
-        return (sa);
+       
     }
 
     function getDate(){
