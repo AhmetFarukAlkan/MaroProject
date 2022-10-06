@@ -3,7 +3,10 @@
 <head>
     <title>Timesheet</title>
     <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
     <link rel="stylesheet" href="/css/main.css"/>
+
     <link rel="stylesheet" type="text/css" th:href="@{/webjars/bootstrap/css/bootstrap.min.css}"/>
 
     <meta charset="UTF-8">
@@ -15,6 +18,7 @@
 
 </head>
 <body>
+
 <header class="bg-dark-blue">
     <div class="container">
         <nav id="navbar">
@@ -37,9 +41,8 @@
 
     <form th:action="@{/home/timesheets}" method="post" th:object="${filter}" id="filter" style="max-width: 90%; margin: 0 auto">
         <div class="border border-secondary rounded p-3">
-            <div class="form-group row">
+            <div id="filterTable" class="form-group row">
                 <div class="col-sm-3">
-
 <!--                    <div class="col-sm-8">-->
 <!--                        <label class="form-control" style="text-align: left">[[${user.name}]]</label>-->
 <!--                    </div>-->
@@ -102,15 +105,20 @@
                     <button type="submit" class="btn btn-primary btn-sm m-1">Filter</button>
                 </div>
                 <div>
-                    <button type="button" class="btn btn-success btn-sm m-1 " onclick="exportExcel()">Export Excel</button>
+
+<!--                    <button type="button" class="btn btn-success btn-sm m-1 " onclick="exportExcel();">Export Excel</button>-->
+                    <a  th:href="@{'/home/timesheets/export/UserValue=' + ${filter.UserValue} + '&yearValue=' + ${filter.yearValue} + '&monthValue=' + ${filter.monthValue} + '&customerValue=' + ${filter.customerValue} + '&mail=' +  ${user.email}}" onclick="return exportExcel()" class="btn btn-success btn-sm m-1">Export Excel</a>
+<!--                    <a th:href="@{'/home/timesheets/export/UserValue=' + ${filter.UserValue} + '/yearValue=' + ${filter.yearValue} + '/monthValue=' + ${filter.monthValue} + '/customerValue=' + ${filter.customerValue} + '/mail=' +  ${user.email}}" class="btn btn-success btn-sm m-1">Export Excel</a>-->
+
                 </div>
+
             </div>
         </div>
     </form>
 
     <div id="AddTimesheet" class="m-2">
         <!--        <a class="h3" th:href="@{/home/timesheets/create}">Create New Activity</a>-->
-        <a th:href="@{/home/timesheets/create}" class="btn btn-info m-2">Create New Activity</a>
+        <a th:href="@{/home/timesheets/create}" class="btn btn-info m-1">Create New Activity</a>
     </div>
 
     <table id="table" class="table table-bordered">
@@ -151,133 +159,24 @@
 </div>
 
 <script src="https://cdn.jsdelivr.net/gh/linways/table-to-excel@v1.0.4/dist/tableToExcel.js"></script>
-<!--<script src="/js/main.js"></script>-->
+<script type="text/javascript" src="https://unpkg.com/xlsx@0.15.1/dist/xlsx.full.min.js"></script>
 
+<!--<script src="/js/main.js"></script>-->
+<!--    apachepoi-->
 <script  th:inline="javascript">
 
     function exportExcel(){
         var user = [[${filter.userValue}]];
         if (user == null || user == "0"){
-            alert("A user must be selected to get excel document.")
+            alert("A user must be selected to get excel document.");
+            return false;
         }else {
-            exportReportToExcel();
+            return true;
         }
 
     }
-    //xlsx yap
-    function exportReportToExcel() {
-        //excel bir binary. backend kısmında da dosya oluşturulabilir bakabilirsin.
-
-        var user = [[${filter.userValue}]];
-        var tab_text = ""
-        var textRange;
-        var tab = document.getElementById('table'); // id of table
-        //tab.title = "Activities_" + getDate() + user;
-        tab_text += "<table>";
-        tab_text += "<tr style='background-color: lightgray;font-weight:bold;'><td>MAROTEKNOLOJI</td></tr>";
-        tab_text += "<tr></tr>";
-        tab_text += "<tr></tr>";
-        tab_text += "<tr>" + "<td style='font-weight:bold;'>" + "User:" + "</td>" + "<td style='text-align: left'>" + tab.rows[1].cells[7].innerHTML + "</td>" + "</tr>";
-        tab_text += "<tr>" + "<td style='font-weight:bold;'>" + "Date:" + "</td>" + "<td style='text-align: left'>" + getDate() + "</td>" + "</tr>";
-        tab_text += "<tr>" + "<td style='font-weight:bold;'>" + "Total Hours:"+ "</td>"+ "<td style='text-align: left'>" + getTotalHour() + "</td>" + "</tr>";
-        tab_text += "<tr>" + "<td style='font-weight:bold;'>" + "Total Days:"+ "</td>" + "<td style='text-align: left'>" + getAverageHour() + "</td>" + "</tr>";
-        tab_text += "<tr></tr>";
-        tab_text += "<tr></tr>";
-
-        for (var r = 0, n = tab.rows.length; r < n; r++) {
-            if (r === 0){
-                tab_text += "<tr bgcolor='#d3d3d3'>";
-                tab_text += "<td style='font-weight:bold;'>" + "Date" + "</td>";
-                tab_text += "<td style='font-weight:bold;'>" + "Activity" + "</td>";
-                tab_text += "<td style='font-weight:bold;'>" + "Project Name" + "</td>";
-                tab_text += "<td style='font-weight:bold;'>" + "Duratinon" + "</td>";
-                tab_text += "<td style='font-weight:bold;'>" + "Location" + "</td>";
-                tab_text += "<td style='font-weight:bold;'>" + "Customer" + "</td>";
-                tab_text += "</tr>";
-            }else {
-                tab_text += "<tr>";
-                tab_text += "<td>" + tab.rows[r].cells[1].innerHTML + "</td>";
-                tab_text += "<td>" + tab.rows[r].cells[3].innerHTML + "</td>";
-                tab_text += "<td>" + tab.rows[r].cells[5].innerHTML + "</td>";
-                tab_text += "<td>" + tab.rows[r].cells[4].innerHTML + "</td>";
-                tab_text += "<td>" + tab.rows[r].cells[2].innerHTML + "</td>";
-                tab_text += "<td>" + tab.rows[r].cells[5].innerHTML + "</td>";
-                tab_text += "</tr>";
-            }
-
-        }
-        tab_text += "</table>";
-
-        tab_text=tab_text+"</table>";
-        tab_text= tab_text.replace(/<A[^>]*>|<\/A>/g, "");//remove if u want links in your table
-        tab_text= tab_text.replace(/<img[^>]*>/gi,""); // remove if u want images in your table
-        tab_text= tab_text.replace(/<input[^>]*>|<\/input>/gi, ""); // reomves input params
-
-        var ua = window.navigator.userAgent;
-        var msie = ua.indexOf("MSIE ");
-
-        if (msie > 0 || !!navigator.userAgent.match(/Trident.*rv\:11\./))      // If Internet Explorer
-        {
-            txtArea1.document.open("txt/html","replace");
-            txtArea1.document.write(tab_text);
-            txtArea1.document.close();
-            txtArea1.focus();
-            sa = txtArea1.document.execCommand("SaveAs",true,"Say Thanks to Sumit.xlsx");
-            
-            document.open("txt/html", "replace");
-            document.write(tab_text);
-            document.close();
-            
-            //sa = window.open('data:application/vnd.ms-excel;charset=utf-8,%EF%BB%BF' + encodeURIComponent(tab_text));
-            // sa = window.open('data:application/vnd.openxmlformats-officedocument.spreadsheetml.sheet;charset=utf-8,%EF%BB%BF' + encodeURIComponent(tab_text));
-             
-            sa = document.execCommand("SaveAs", true, tab.rows[1].cells[7].innerHTML + "_" + getDate() +".xls");
-            return (sa);
-        }
-        else{            //other browser not tested on IE 11
-            // var header = '<meta http-equiv="content-type" content="application/vnd.ms-excel; charset=UTF-8">';
-            var header = '<meta http-equiv="content-type" content="application/vnd.openxmlformats-officedocument.spreadsheetml.sheet; charset=UTF-8">';
-
-            var blob = new Blob([header + tab_text], {
-                //type: "data:application/vnd.ms-excel;charset=UTF-8"});
-                type: "data:application/vnd.openxmlformats-officedocument.spreadsheetml.sheet;charset=UTF-8"});
-            // saveAs(blob, "excel"+".xls");
-            saveAs(blob, tab.rows[1].cells[7].innerHTML + "_" + getDate() +".xls");
-        }
-            //html to xls bak
-            //butonları değiştir
-            //date format
-            //user ana sayfada logout butonu
-            //üst menüyü değitir
-            //
-
-
-       
-    }
-
-    function getDate(){
-        const date = new Date();
-        let day = date.getDate();
-        let month = date.getMonth() + 1;
-        let year = date.getFullYear();
-        let currentDate = `${day}-${month}-${year}`;
-        return currentDate;
-    }
-
-    function getTotalHour(){
-        var tab = document.getElementById('table');
-        var hour = 0;
-        for(var j = 1 ; j < tab.rows.length ; j++)
-        {
-            hour += parseFloat(tab.rows[j].cells[4].innerHTML);
-        }
-        return hour;
-    }
-    function getAverageHour(){
-        return getTotalHour() / 8;
-    }
-
 </script>
+
 <script th:inline="javascript">
     $(document).ready(function() {
         var date = new Date();
