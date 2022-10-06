@@ -279,7 +279,7 @@ public class TimesheetController {
             String currentDateTime = dateFormatter.format(new Date());
 
             String headerKey = "Content-Disposition";
-            String headerValue = "attachment; filename=users_" + currentDateTime + ".xlsx";
+            String headerValue = "attachment; filename=" + userService.getUserByEmail(UserValue).getName() + "_" + currentDateTime + ".xlsx";
             response.setHeader(headerKey, headerValue);
             sheet = workbook.createSheet("Timesheet");
 
