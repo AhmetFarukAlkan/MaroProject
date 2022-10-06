@@ -15,6 +15,7 @@ import com.MaroTekTimesheets.MaroProject.Service.TimesheetService;
 import com.MaroTekTimesheets.MaroProject.Service.UserService;
 import lombok.RequiredArgsConstructor;
 import lombok.Value;
+import org.apache.poi.ss.usermodel.*;
 import org.hibernate.cfg.Environment;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
@@ -23,17 +24,33 @@ import org.springframework.security.oauth2.core.user.OAuth2User;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.context.request.RequestAttributes;
+import org.springframework.web.context.request.RequestContextHolder;
+import org.springframework.web.context.request.ServletRequestAttributes;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import java.text.DateFormat;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.*;
+import javax.servlet.http.HttpServletResponse;
+
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Controller;
+import org.springframework.web.bind.annotation.GetMapping;
+
+import org.apache.poi.xssf.usermodel.XSSFFont;
+import org.apache.poi.xssf.usermodel.XSSFSheet;
+import org.apache.poi.xssf.usermodel.XSSFWorkbook;
+import javax.servlet.ServletOutputStream;
+import javax.servlet.http.HttpServletResponse;
+import java.io.IOException;
 
 @Controller
 @RequestMapping("/home/timesheets")
 @RequiredArgsConstructor
 public class TimesheetController {
+    //excel method
 
     private final UserService userService;
     private final CustomerService customerService;
@@ -44,8 +61,9 @@ public class TimesheetController {
 
     private final com.MaroTekTimesheets.MaroProject.oauth2.Controller controller;
 
+//
     @GetMapping("")
-    public String showCustomerList(Model model, @AuthenticationPrincipal OAuth2User user) throws ParseException {
+    public String showTimesheetList(Model model, @AuthenticationPrincipal OAuth2User user) throws ParseException {
         if (userService.isActive(user)){
             if (userService.ControlUser(user).getUser_role().getName().equals("ADMIN")){
                 model.addAttribute("listTimesheets", timesheetService.GetTimeSheets());
@@ -90,6 +108,7 @@ public class TimesheetController {
 //        return ResponseEntity.ok(timesheetRepository.findAll());
 //    }
 
+//
     @GetMapping("/create")
     public String addNewTimesheet(Model model, @AuthenticationPrincipal OAuth2User user){
         if (userService.isActive(user)){
@@ -104,7 +123,7 @@ public class TimesheetController {
             return "redirect:/passive-user";
         }
     }
-
+//
     @GetMapping("/edit/{id}")
     public String editActivityForm(@PathVariable("id") Long id, Model model, @AuthenticationPrincipal OAuth2User user){
         if (userService.isActive(user)){
@@ -133,7 +152,7 @@ public class TimesheetController {
 
     }
 
-
+//
     @PostMapping({"/create","/edit"})
     public String createActivity(TimesheetDto timesheetDto,RedirectAttributes ra,@AuthenticationPrincipal OAuth2User user) throws ParseException {
         if (timesheetDto.getTimeSheetDate().equals("") || timesheetDto.getDuration() == null
@@ -220,6 +239,194 @@ public class TimesheetController {
         model.addAttribute("user", new User());
         return "redirect:/";
 
+    }
+
+
+//    @GetMapping("/export?UserValue={User}&yearValue={year}&monthValue={month}&customerValue={customer}&mail={mail}")
+
+//    http://localhost:8080/home/timesheets/export?UserValue=ahmetfarukalkan16@gmail.com&yearValue=2022&monthValue=-1&customerValue=0&mail=ahmetfarukalkan16@gmail.com
+//@PostMapping("/export")
+//    public String exportToExcel(FilterDto filterDto, @AuthenticationPrincipal OAuth2User user) throws IOException {
+    @GetMapping("/export/UserValue={user}&yearValue={year}&monthValue={month}&customerValue={customer}&mail={email}")
+//@GetMapping("/export")
+
+    public String exportToExcel(@PathVariable("user") String UserValue, @PathVariable("year") String yearValue, @PathVariable("month") String monthValue, @PathVariable("customer") String customerValue,@PathVariable("email") String mail, HttpServletResponse response) throws IOException{
+//    public String exportToExcel()throws IOException {
+        try {
+            XSSFWorkbook workbook = new XSSFWorkbook();
+             XSSFSheet sheet;
+
+
+            FilterDto filterDto = new FilterDto();
+            filterDto.setUserValue(UserValue);
+            filterDto.setYearValue(yearValue);
+            filterDto.setMonthValue(monthValue);
+            filterDto.setCustomerValue(customerValue);
+            User user = userService.getUserByEmail(mail);
+
+
+    //        filterDto.setUserValue("ahmetfarukalkan16@gmail.com");
+    //        filterDto.setYearValue("2022");
+    //        filterDto.setMonthValue("-1");
+    //        filterDto.setCustomerValue("0");
+    //        User user = userService.getUserByEmail("ahmetfarukalkan16@gmail.com");
+
+//            RequestAttributes requestAttributes = RequestContextHolder.getRequestAttributes();
+//            HttpServletResponse response = ((ServletRequestAttributes)requestAttributes).getResponse();
+
+            response.setContentType("application/octet-stream");
+            DateFormat dateFormatter = new SimpleDateFormat("dd-MM-yyyy");
+            String currentDateTime = dateFormatter.format(new Date());
+
+            String headerKey = "Content-Disposition";
+            String headerValue = "attachment; filename=users_" + currentDateTime + ".xlsx";
+            response.setHeader(headerKey, headerValue);
+            sheet = workbook.createSheet("Timesheet");
+
+            CellStyle style = workbook.createCellStyle();
+            CellStyle style2 = workbook.createCellStyle();
+            CellStyle style3 = workbook.createCellStyle();
+            XSSFFont font = workbook.createFont();
+            XSSFFont font2 = workbook.createFont();
+
+            Row row;
+
+            font.setBold(true);
+            font.setFontHeight(10);
+
+            font2.setFontHeight(10);
+
+            style.setFont(font);
+            style2.setFont(font2);
+            style3.setFont(font);
+
+            List<Timesheet> timesheets = timesheetRepository.findAll();
+            Collections.sort(timesheets);
+            List<TimesheetDto> Dtotimesheets = new ArrayList<>();
+            float totalHours = 0;
+            if (user.getUser_role().getName().equals("ADMIN")) {
+                for (Timesheet timesheet : timesheets) {
+                    if ((filterDto.getUserValue().equals("0") || timesheet.getUser().getEmail().equals(filterDto.getUserValue())) &&
+                            (filterDto.getYearValue().equals("0") || timesheet.getTimeSheetDate().getYear() + 1900 == Integer.valueOf(filterDto.getYearValue())) &&
+                            (filterDto.getMonthValue().equals("-1") || timesheet.getTimeSheetDate().getMonth() == Integer.valueOf(filterDto.getMonthValue())) &&
+                            (filterDto.getCustomerValue().equals("0") || timesheet.getCustomer().getName().equals(filterDto.getCustomerValue()))) {
+                        Dtotimesheets.add(timesheetService.timesheetToTimesheetDto(timesheet));
+                        totalHours += Float.valueOf(timesheet.getDuration());
+                    }
+                }
+
+            }
+            else if (user.getUser_role().getName().equals("USER")) {
+                for (Timesheet timesheet : timesheets) {
+                    if ((filterDto.getUserValue().equals("0") || timesheet.getUser().getEmail().equals(user.getEmail())) &&
+                            (filterDto.getYearValue().equals("0") || timesheet.getTimeSheetDate().getYear() + 1900 == Integer.valueOf(filterDto.getYearValue())) &&
+                            (filterDto.getMonthValue().equals("-1") || timesheet.getTimeSheetDate().getMonth() == Integer.valueOf(filterDto.getMonthValue())) &&
+                            (filterDto.getCustomerValue().equals("0") || timesheet.getCustomer().getName().equals(filterDto.getCustomerValue()))
+                    ) {
+                        Dtotimesheets.add(timesheetService.timesheetToTimesheetDto(timesheet));
+                        totalHours += Float.valueOf(timesheet.getDuration());
+                    }
+                }
+            }
+
+            row = sheet.createRow(0);
+            style.setFillForegroundColor(IndexedColors.GREY_25_PERCENT.getIndex());
+            style.setFillPattern(FillPatternType.SOLID_FOREGROUND);
+            createCell(row, 0, "MAROTEKNOLOJİ", style, sheet);
+
+            row = sheet.createRow(2);
+            createCell(row, 0, "User:", style3, sheet);
+            createCell(row, 1, user.getName(), style2, sheet);
+
+            row = sheet.createRow(3);
+            createCell(row, 0, "Date:", style3, sheet);
+            createCell(row, 1, currentDateTime, style2, sheet);
+
+            row = sheet.createRow(4);
+            createCell(row, 0, "Total Hours:", style3, sheet);
+            createCell(row, 1, String.valueOf(totalHours), style2, sheet);
+
+            row = sheet.createRow(5);
+            createCell(row, 0, "Total Days:", style3, sheet);
+            createCell(row, 1, String.valueOf(totalHours / 8), style2, sheet);
+
+            row = sheet.createRow(8);
+            createCell(row, 0, "Date", style, sheet);
+            createCell(row, 1, "Activity", style, sheet);
+            createCell(row, 2, "Project Name", style, sheet);
+            createCell(row, 3, "Duration", style, sheet);
+            createCell(row, 4, "Location", style, sheet);
+            createCell(row, 5, "Customer", style, sheet);
+
+        int rowCount = 9;
+
+            style = workbook.createCellStyle();
+            font = workbook.createFont();
+            font.setFontHeight(10);
+            style.setFont(font);
+
+            DateFormat dateFormatter2 = new SimpleDateFormat("dd MMMM yyyy EEEEE");
+
+        for (TimesheetDto timesheet : Dtotimesheets) {
+                Row row2 = sheet.createRow(rowCount);
+                rowCount++;
+                int columnCount = 0;
+
+                createCell(row2, columnCount, dateFormatter2.format(timesheet.getCreateDate()), style, sheet);
+                columnCount++;
+    //            System.out.println(timesheet.getCreateDate().toString());
+                createCell(row2, columnCount, timesheet.getTask(), style, sheet);
+                columnCount++;
+    //            System.out.println(timesheet.getTask());
+                createCell(row2, columnCount, timesheet.getCustomer(), style, sheet);
+                columnCount++;
+    //            System.out.println(timesheet.getCustomer());
+                createCell(row2, columnCount, timesheet.getDuration().toString(), style, sheet);
+                columnCount++;
+    //            System.out.println(timesheet.getDuration());
+                createCell(row2, columnCount, timesheet.getLocation(), style, sheet);
+                columnCount++;
+    //            System.out.println(timesheet.getLocation());
+                createCell(row2, columnCount, timesheet.getCustomer(), style, sheet);
+    //            System.out.println(timesheet.getCustomer());
+            }
+
+        ServletOutputStream outputStream = response.getOutputStream();
+        workbook.write(outputStream);
+
+    //    workbook.write(response.getOutputStream());
+
+    //    response.getOutputStream().flush();
+    //    response.getOutputStream().close();
+
+        workbook.close();
+
+        outputStream.flush();
+        outputStream.close();
+            return null;
+        }catch (IllegalStateException e)
+        {
+            System.out.println();
+        }
+//    response.getOutputStream().flush();
+//    response.getOutputStream().close();
+
+//    return "redirect:/home/timesheets";
+    return null;
+
+    }
+
+    private void createCell(Row row, int columnCount, Object value, CellStyle style, XSSFSheet sheet) {
+        sheet.autoSizeColumn(columnCount);
+        Cell cell = row.createCell(columnCount);
+        if (value instanceof Integer) {
+            cell.setCellValue((Integer) value);
+        } else if (value instanceof Boolean) {
+            cell.setCellValue((Boolean) value);
+        }else {
+            cell.setCellValue((String) value);
+        }
+        cell.setCellStyle(style);
     }
 
 //    @PostMapping
